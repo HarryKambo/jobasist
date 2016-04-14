@@ -1,0 +1,51 @@
+<?php
+namespace App\Controller;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+class UsersController extends AppController{
+	
+	public function index(){
+		
+		$this->viewBuilder()->layout('user');
+
+	}
+	public function dashboard(){
+	   
+		$this->viewbuilder()->layout('user');
+
+	}
+	public function addjob(){	   
+	    $this->viewBuilder()->layout('user');
+	    if($this->request->is('post')){
+	       // pr($this->request->data());
+	        //save data to database
+	        $jobs = TableRegistry::get('Jobs');
+	        $job = $jobs->newEntity();
+	        $job = $jobs->patchEntity($job, $this->request->data);
+	        if($jobs->save($job)){
+	            $this->Flash->success(__('New job created!!'));
+	        }
+	        else{
+	            $this->Flash->error(__('New Job could not be created!!'));
+	        }
+	       //  die("Hi");
+	    }	    
+	}
+	public function joblist(){
+		
+		$jobs = TableRegistry::get('Jobs');
+		$this->viewBuilder()->layout('user');
+		
+		//$this->loadModel("Jobs");
+		//$jobs = $this->Jobs->find('all');
+		
+		debug(json_encode($jobs->find()->toArray()));die;
+		$this->set('jobs', $jobs);
+	}
+	public function email(){
+		$this->viewBuilder()->layout('user');
+	}
+	
+	
+}
+?>
